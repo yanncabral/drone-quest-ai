@@ -1,8 +1,6 @@
 ﻿using Core;
 
-var game = new Game();
-
-void SendData()
+void Loop(Agent agent)
 {
     while (true)
     {
@@ -10,7 +8,7 @@ void SendData()
 
         if (i is not null)
         {
-            game.RunCommand(i);
+            agent.SendCommand((Command) i[0]);
         }
         else
         {
@@ -19,8 +17,16 @@ void SendData()
     }
 }
 
-var sender = new Thread(SendData);
 
-sender.Start();
-sender.Join();
+// var agent = new Agent(new RandomController());
+var agent = new Agent(new ManualController());
+
+Loop(agent);
+
+// var sender = new Thread(SendData);
+//
+// sender.Start();
+// sender.Join();
+
+
 
