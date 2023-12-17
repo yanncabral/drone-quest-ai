@@ -6,7 +6,7 @@ void Loop(Agent agent)
     {
         var i = Console.ReadLine();
 
-        if (i is not null)
+        if (i is not null && i.Length > 0)
         {
             agent.SendCommand((Command) i[0]);
         }
@@ -19,7 +19,12 @@ void Loop(Agent agent)
 
 
 // var agent = new Agent(new RandomController());
-var agent = new Agent(new ManualController());
+var agent = new Agent
+{
+    Controller = new RandomController(),
+};
+
+var game = new GameClient(agent);
 
 Loop(agent);
 

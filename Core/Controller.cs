@@ -29,37 +29,16 @@ public enum Command
     /// <summary>
     /// Receive information about the world around you.
     /// </summary>
-    Observe = 'o'
+    Observe = 'o',
+
+    GameStatus = 'g', //sendRequestGameStatus(); - receber o status do jogo (estado, tempo atual)
+    UserStatus = 'q', //sendRequestUserStatus(); - receber status do usuário (posição, estado do agente, pontos e energia)
+    SendRequestPosition = 'p', // sendRequestPosition(); - receber posição do agente
+    SendRequestScoreboard = 'u', // (); - lista de usuários logados e pontos
+    //quit sendGoodbye(); - desconectar do jogo
 }
 
 public interface IController
 {
-    public Command React(AgentState state);
+    public Command? React(AgentState state);
 }
-
-public class RandomController : IController
-{
-    public Command React(AgentState state)
-    {
-        var random = new Random();
-        var values = Enum.GetValues(typeof(Command));
-        var randomCommand = (Command) values.GetValue(random.Next(values.Length))!;
-        
-        Console.WriteLine($"Reacting with {randomCommand}");
-
-        return randomCommand;
-    }
-}
-
-public class ManualController : IController
-{
-    public Command React(AgentState state)
-    {
-        // Returns command from user input
-        var input = Console.ReadKey().KeyChar;
-        var command = (Command) input;
-
-        return command;
-    }
-}
-

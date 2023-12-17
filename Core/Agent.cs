@@ -2,12 +2,19 @@ namespace Core;
 
 public class AgentState
 {
-    public (int x, int y) Position { get; init; }
-    public Direction Direction { get; init; }
+    public (int x, int y) Position { get; set; }
+    public Direction Direction { get; set; }
     
-    public int Score { get; init; }
-    public int Energy { get; init; }
-    public int Ammo { get; init; }
+    public int Score { get; set; }
+    public int Energy { get; set; }
+    public int Ammo { get; set; }
+    
+    public List<Observation> Observations { get; init; } = new();
+
+    public override string ToString()
+    {
+        return $"AgentState(Position: {Position}, Direction: {Direction}, Score: {Score}, Energy: {Energy}, Ammo: {Ammo})";
+    }
 }
 
 public enum State
@@ -26,7 +33,7 @@ public enum Direction
     West,
 }
 
-public enum Observations
+public enum Observation
 {
     Blocked,
     Steps,
@@ -58,21 +65,23 @@ public class Agent
     public string Name { get; set; } = $"Tony Stark #{DateTime.Now.GetHashCode()}";
     public Color Color { get; set; } = new (0, 0, 0);
     
-    // State
     public AgentState? State { get; set; }
 
-    private GameClient Client { get; set; }
-    public IController Controller { get; set; }
-    
-    public Agent(IController controller)
+    public GameClient? Client { get; set; }
+    public IController Controller { get; init; }
+
+    public void Start()
     {
-        Controller = controller;
-        Client = new GameClient(this);
+        // Agent = agent;
+        // _client.sendColor(Agent.Color.R, Agent.Color.G, Agent.Color.B);
+        // _client.sendName(Agent.Name);
     }
     
     public void SendCommand(Command command)
     {
         Console.WriteLine($"Sending {Enum.GetName(typeof(Command), command)}");
+        if (Client is null)
+            throw new NullReferenceException("Agent is not initialized.Have you added into a game client?");
         Client.SendCommand(command);
         Client.SendCommand(Command.Observe);
     }
