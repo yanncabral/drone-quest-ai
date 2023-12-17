@@ -9,7 +9,7 @@ public sealed class GameClient
     private readonly HandleClient _client = new ();
 
     private Agent Agent { get; set; } = new ();
-
+    
     public Player[] ScoreBoard { get; set; } = new Player[] { };
 
     public GameClient(Agent agent)
@@ -19,42 +19,119 @@ public sealed class GameClient
         Agent = agent;
         _client.connect(Host);
         agent.Client = this;
-        _client.sendRequestUserStatus();
+        Start();
+        // _client.sendRequestUserStatus();
+    }
+    
+    public void Start()
+    {
+        _client.sendName(this.Agent.Name);
+        _client.sendRequestScoreboard();
     }
 
     private static void HandleStatusEvent(object? sender, EventArgs args)
     {
         Console.WriteLine($"Receiving status event: {args}");
     }
-    
+
     private void HandleCommandEvent(object? sender, EventArgs args)
     {
         if (args is CommandEventArgs eventArgs)
         {
             var command = eventArgs.cmd!;
 
-            if (command[0] == "s" && command.Length > 1)
+            if (command[0] != "u")
             {
-                var state = ParseState(command);
-                Agent.State = state;
-                var response = Agent.Controller.React(state);
+                Console.Write($"Receiving command event: [");
 
-                _client.sendMsg(((char) response).ToString());
+                foreach (var c in command)
+                {
+                    Console.Write($"{c}, ");
+                }
+                Console.WriteLine($"\b\b]");
             }
 
+            if (command[0] == "hello")
+            {
+                Console.WriteLine($"{command[1]} has entered the game");
+            }
+            
+            if (command[0] == "goodbye")
+            {
+                Console.WriteLine($"{command[1]} has exited the game");
+            }
+
+            if (command[0] == "changename")
+            {
+                Console.WriteLine($"{command[1]} has changed name to {command[2]}");
+            }
+            
+            if (command[0] == "d")
+            {
+                Console.WriteLine($"{command[1]} hit you");
+            }
+            
+            if (command[0] == "h")
+            {
+                Console.WriteLine($"You hit {command[1]}");
+            }
+            
             if (command[0] == "u")
             {
                 ScoreBoard = ParseScoreBoard(command);
             }
-
+            
+            if (command[0] == "s" && command.Length > 1)
+            {
+                var state = ParseState(command);
+                Agent.State = state;
+            }
+            
             if (command[0] == "p" && Agent.State is not null)
             {
                 Agent.State.Position = (int.Parse(command[1]), int.Parse(command[2]));
             }
-        }
 
-        _client.sendRequestUserStatus();
-        _client.sendRequestScoreboard();
+            if (command[0] == "o" && Agent.State is not null)
+            {
+                var observation = command[1] switch
+                {
+                    "blocked" => Observation.Blocked,
+                    "steps" => Observation.Steps,
+                    "breeze" => Observation.Breeze,
+                    "flash" => Observation.Flash,
+                    "blueLight" => Observation.BlueLight,
+                    "redLight" => Observation.RedLight,
+                    "greenLight" => Observation.GreenLight,
+                    "weakLight" => Observation.Weaklight,
+                    "enemy" => Observation.Enemy,
+                    "damage" => Observation.Damage,
+                    "hit" => Observation.Hit,
+                    _ => throw new ArgumentOutOfRangeException(),
+                };
+
+                Agent.State.Observations.Add(observation);
+            }
+        }
+        else
+        {
+            Console.WriteLine($"HandleCommandEvent emmited: {args}");
+        }
+            
+        
+        // var response = Agent.Controller.React(null);
+        //         
+        // if (response is not null) 
+        //     _client.sendMsg(((char) response).ToString());
+
+        // _client.sendRequestUserStatus();
+        // _client.sendRequestScoreboard();
+    }
+
+    public void SendCommand(char command)
+    {
+        Console.WriteLine($"Sending command: ${command}");
+        _client.sendMsg(command.ToString());
     }
 
     private static Player[] ParseScoreBoard(string[] command)
@@ -107,10 +184,5 @@ public sealed class GameClient
         };
 
         return state;
-    }
-
-    public void SendCommand(Command command)
-    {
-        _client.sendMsg(((char)command).ToString());
     }
 }

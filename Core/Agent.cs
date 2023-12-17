@@ -66,6 +66,7 @@ public class Agent
     public Color Color { get; set; } = new (0, 0, 0);
     
     public AgentState? State { get; set; }
+    public Command? LastCommand { get; set; }
 
     public GameClient? Client { get; set; }
     public IController Controller { get; init; }
@@ -76,13 +77,12 @@ public class Agent
         // _client.sendColor(Agent.Color.R, Agent.Color.G, Agent.Color.B);
         // _client.sendName(Agent.Name);
     }
-    
+
     public void SendCommand(Command command)
     {
-        Console.WriteLine($"Sending {Enum.GetName(typeof(Command), command)}");
         if (Client is null)
             throw new NullReferenceException("Agent is not initialized.Have you added into a game client?");
-        Client.SendCommand(command);
-        Client.SendCommand(Command.Observe);
+        
+        Client.SendCommand((char) command);
     }
 }

@@ -7,11 +7,10 @@ public class ManualController : IController
         Console.WriteLine($"Reacting to {state}");
         // Returns command from user input
         var input = Console.ReadLine();
-        if (input is not null && input.Length != 0) return null;
+        if (input is null || input.Length == 0) return null;
         
-        var command = (Command) input![0];
+        var command = (Command) input[0];
 
         return command;
-
     }
 }
