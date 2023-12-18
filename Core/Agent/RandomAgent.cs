@@ -1,16 +1,14 @@
-namespace Core;
+namespace Core.Agent;
 
-public class RandomController : IController
+public class RandomAgent : Agent
 {
-    public Command? React(AgentState state)
+    protected override Command? Think(AgentStore store)
     {
         var random = new Random();
         var values = Enum.GetValues(typeof(Command));
         var randomCommand = (Command) values.GetValue(random.Next(values.Length))!;
-
-        Thread.Sleep(1000);
         
-        Console.WriteLine($"Reacting {state} with {randomCommand}");
+        Thread.Sleep(100);
 
         return randomCommand;
     }

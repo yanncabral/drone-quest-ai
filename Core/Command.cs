@@ -26,11 +26,21 @@ public enum Command
     /// To shoot the ammunition in a straight line in the direction the agent is looking - The ammunition is unlimited and has a range until it collides with a blocked position
     /// </summary>
     Shoot = 'e',
-    
-    Observe = 'o',
 }
 
-public interface IController
+static class CommandExtensions
 {
-    public Command? React(AgentState? state);
+    public static Command? ToCommand(this char c)
+    {
+        return c switch
+        {
+            'w' => Command.MoveForward,
+            's' => Command.MoveBackward,
+            'a' => Command.TurnLeft,
+            'd' => Command.TurnRight,
+            't' => Command.PickUp,
+            'e' => Command.Shoot,
+            _ => null
+        };
+    }
 }

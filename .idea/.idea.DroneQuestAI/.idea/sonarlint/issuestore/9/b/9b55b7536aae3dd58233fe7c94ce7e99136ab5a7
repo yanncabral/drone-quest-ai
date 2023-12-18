@@ -1,7 +1,0 @@
-
-csharpsquid:S3928n"[Use a constructor overloads that allows a more meaningful exception message to be provided.(Ñòª“8ÎÂÏÑÇ1
-€csharpsquid:S3928³"[Use a constructor overloads that allows a more meaningful exception message to be provided.(Ñòª“8ÏÂÏÑÇ1
-{csharpsquid:S3776%"RRefactor this method to reduce its Cognitive Complexity from 31 to the 15 allowed.(ëÒ®Ÿûÿÿÿÿ8š¤ĞÇ1
-xcsharpsquid:S3604"TRemove the member initializer, all constructors set an initial value for the member.(‹‚Àõ8‚¦©ÎÇ1
-Gcsharpsquid:S125"Remove this commented out code.(³™ÄŠÿÿÿÿÿ8ƒœÄĞÇ1
-Acsharpsquid:S125z"Remove this commented out code.(½ı“J8ÏÂÏÑÇ1

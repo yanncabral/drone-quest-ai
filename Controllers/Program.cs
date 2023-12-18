@@ -1,8 +1,5 @@
-﻿using Core;
+﻿using Core.Agent;
 
-var agent = new Agent
-{
-    Controller = new ManualController(),
-};
+var agent = new DecisionTreeAgent();
 
-var game = new GameClient(agent);
+agent.Start();
