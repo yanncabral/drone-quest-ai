@@ -1,4 +1,7 @@
-namespace Core.Agent;
+using Core;
+using Core.Agent;
+
+namespace Controllers.Agents;
 
 public class ManualAgent : Agent
 {

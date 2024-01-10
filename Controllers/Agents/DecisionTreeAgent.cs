@@ -1,4 +1,7 @@
-namespace Core.Agent;
+using Core;
+using Core.Agent;
+
+namespace Controllers.Agents;
 
 public class DecisionNode
 {
@@ -66,8 +69,7 @@ public class DecisionTree
     private static Command GetAlternativeCommand(AgentState state)
     {
         var random = new Random();
-
-        // Exemplo de lógica refinada
+        
         if (state.Observations.Contains(Observation.Blocked))
         {
             // Se bloqueado, vire ou recue

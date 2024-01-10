@@ -1,4 +1,5 @@
-﻿using Core.Agent;
+﻿using Controllers.Agents;
+using Core.Agent;
 
 var agent = new DecisionTreeAgent();
 
